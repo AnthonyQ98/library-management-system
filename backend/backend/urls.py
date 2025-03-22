@@ -18,11 +18,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from lms import views
+from lms.views import LoginView
 
 router = routers.DefaultRouter()
-router.register(r'books', views.LmsView, 'book')
+router.register(r'books', views.BookView, 'book')
+router.register(r'members', views.MemberView, 'member')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/login/', LoginView.as_view(), name='login'),
 ]

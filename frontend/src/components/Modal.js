@@ -13,15 +13,17 @@ class Modal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.book !== this.props.book && this.props.book) {
+        if (prevProps.book !== this.props.book) {
             this.setState({
-                title: this.props.book.title,
-                description: this.props.book.description,
-                available: this.props.book.available,
-                rentee: this.props.book.rentee,
+                title: this.props.book ? this.props.book.title : "",
+                description: this.props.book ? this.props.book.description : "",
+                available: this.props.book ? this.props.book.available : true,
+                rentee: this.props.book ? this.props.book.rentee : "",
+                error: "",
             });
         }
     }
+    
 
     handleSubmit = (e) => {
         e.preventDefault();
