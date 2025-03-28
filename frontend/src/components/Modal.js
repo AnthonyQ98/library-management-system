@@ -13,6 +13,7 @@ class Modal extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        // Update local state when book prop changes
         if (prevProps.book !== this.props.book) {
             this.setState({
                 title: this.props.book ? this.props.book.title : "",
@@ -22,9 +23,13 @@ class Modal extends Component {
                 error: "",
             });
         }
+        
+        // Update local error state if props.error changes
+        if (prevProps.error !== this.props.error && this.props.error) {
+            this.setState({ error: this.props.error });
+        }
     }
     
-
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -41,6 +46,9 @@ class Modal extends Component {
     };
 
     render() {
+        // Use either local error state or error passed from props
+        const errorMessage = this.state.error || this.props.error;
+        
         return (
             <div className="modal show" style={{ display: "block" }}>
                 <div className="modal-dialog">
@@ -57,6 +65,12 @@ class Modal extends Component {
                             </button>
                         </div>
                         <div className="modal-body">
+                            {errorMessage && (
+                                <div className="alert alert-danger">
+                                    {errorMessage}
+                                </div>
+                            )}
+                            
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
                                     <label>Title</label>
@@ -96,12 +110,6 @@ class Modal extends Component {
                                         onChange={(e) => this.setState({ available: e.target.checked })}
                                     />
                                 </div>
-
-                                {this.state.error && (
-                                    <div className="alert alert-danger">
-                                        {this.state.error}
-                                    </div>
-                                )}
 
                                 <button type="submit" className="btn btn-primary">
                                     {this.props.book ? "Save Changes" : "Create Book"}

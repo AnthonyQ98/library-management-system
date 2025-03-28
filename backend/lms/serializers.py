@@ -1,18 +1,18 @@
 from rest_framework import serializers
-from .models import Book, Member, User
-from django.contrib.auth.models import User
+from .models import Book, Rental, CustomUser
 
-class LmsSerializer(serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ('id', 'title', 'description', 'available', 'rentee')
 
-class MemberSerializer(serializers.ModelSerializer):
+class RentalSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Member
-        fields = ('id', 'name', 'phone_number', 'email', 'address', 'active')
+        model = Rental
+        fields = ('id', 'book', 'member', 'rented_at', 'returned_at')
 
 class UserSerializer(serializers.ModelSerializer):
+    is_staff = serializers.BooleanField() 
     class Meta:
-        model = User
-        fields = ('id', 'username', 'email', 'password')
+        model = CustomUser
+        fields = ('id', 'address', 'phone_number', 'username', 'email', 'first_name', 'last_name', 'is_staff')

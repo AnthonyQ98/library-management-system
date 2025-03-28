@@ -1,38 +1,46 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
-# Create your models here.
+# Custom User Model to support Members and Admins
+class CustomUser(AbstractUser):
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        return self.username
+
+# Book Model for Library
 class Book(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField()
     available = models.BooleanField(default=True)
-    rentee = models.TextField(default="")
+    rentee = models.ForeignKey(
+        "CustomUser", on_delete=models.SET_NULL, null=True, blank=True, related_name="rented_books"
+    )
 
-
-    def _str_(self):
+    def __str__(self):
         return self.title
-    
-
-class Member(models.Model):
-    name = models.CharField(max_length=60)
-    phone_number = models.CharField(max_length=20)
-    email = models.EmailField()
-    address = models.TextField()
-    active = models.BooleanField(default=True)
 
 
-    def _str_(self):
-        return self.name
-    
-class User(models.Model):
-    name = models.CharField(max_length=60)
-    phone_number = models.CharField(max_length=20)
-    email = models.EmailField()
-    address = models.TextField()
-    active = models.BooleanField(default=True)
+# Rental Model to Track Book Rentals
+class Rental(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    member = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    rented_at = models.DateTimeField(auto_now_add=True)
+    returned_at = models.DateTimeField(null=True, blank=True)
 
+    class Meta():
+        ordering = ['-rented_at']
 
-    def _str_(self):
-        return self.name
+    def return_book(self):
+        """ Marks a book as returned. """
+        self.returned_at = timezone.now()
 
+        self.book.available = True
+        self.book.rentee = None
+        self.book.save()
+        self.save()
+
+    def __str__(self):
+        return f"{self.member.username} rented {self.book.title}"

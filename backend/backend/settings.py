@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,13 +52,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
+    'lms.middleware.GlobalPermissionMiddleware'
 ]
 
 REST_FRAMEWORK = {
        'DEFAULT_AUTHENTICATION_CLASSES': (
            'rest_framework_simplejwt.authentication.JWTAuthentication',
-       )
+       ),
+       'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissions',
+    )
    }
 
 ROOT_URLCONF = 'backend.urls'
@@ -91,6 +96,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'lms.CustomUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -136,3 +142,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+
+SIMPLE_JWT = {
+    # Set the access token to last 1 hour instead of the default (often 5-15 minutes)
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+
+    # Optionally, extend the refresh token lifetime as well (e.g., 7 days)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    
+    # Other settings...
+}
