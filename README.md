@@ -26,7 +26,7 @@ Everything runs inside Docker using docker-compose for a smooth dev experience w
 ---
 
 ## Setup
-
+```
 1. Clone the repository:
 
    git clone https://github.com/your-username/your-repo.git
@@ -44,18 +44,19 @@ Everything runs inside Docker using docker-compose for a smooth dev experience w
 
    - Backend (Django API): http://localhost:8000
    - Frontend (React): http://localhost:3000
-
+```
 ---
 
 ## Common Commands
 
+```
    make up                # Start the app in background
    make down              # Stop all containers
    make restart           # Rebuild and restart everything
    make migrate           # Run Django database migrations
    make createsuperuser   # Create a Django admin user
    make logs              # Tail logs from all services
-
+```
 ---
 
 ## Project Structure
@@ -80,9 +81,9 @@ Everything runs inside Docker using docker-compose for a smooth dev experience w
 
 - To create new Django apps:
 
-  docker-compose exec backend python manage.py startapp mynewapp
+  ```docker-compose exec backend python manage.py startapp mynewapp```
 
-- To add frontend routes/components, update files in frontend/src/.
+- To add frontend routes/components, update files in ```frontend/src/.```
 
 ---
 
@@ -90,7 +91,7 @@ Everything runs inside Docker using docker-compose for a smooth dev experience w
 
 Run Django tests with:
 
-  docker-compose exec backend python manage.py test
+ ``` docker-compose exec backend python manage.py test```
 
 (Frontend testing with Jest can be added later.)
 
