@@ -60,7 +60,7 @@ Everything runs inside Docker using docker-compose for a smooth dev experience w
 
 ## Project Structure
 
-.
+```
 ├── backend/          # Django project
 │   ├── manage.py
 │   ├── backend/    # Django settings
@@ -72,6 +72,7 @@ Everything runs inside Docker using docker-compose for a smooth dev experience w
 ├── docker-compose.yml
 ├── Makefile
 └── README.md
+```
 
 ---
 
