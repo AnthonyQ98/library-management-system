@@ -19,15 +19,23 @@ const AdminBooks = () => {
     });
   };
 
-  useEffect(() => {
-    fetchBooks();
-  }, []);
+  try {
+    useEffect(() => {
+      console.log("Fetching books...");
+      fetchBooks();
+    }, []);
+  } catch (err) {
+    console.error("Error in useEffect:", err);
+  }
 
   const fetchBooks = () => {
     setError(null); // Clear any previous errors
     const authAxios = getAuthAxios();
     authAxios.get("manage/")
-      .then((res) => setBooks(res.data))
+      .then((res) => {
+        console.log("Books fetched:", res.data);
+        setBooks(res.data)
+      })
       .catch((err) => {
         console.error("Error fetching books:", err);
         if (err.response?.status === 403 || err.response?.status === 401) {
@@ -41,6 +49,7 @@ const AdminBooks = () => {
 
   const createBook = () => {
     setError(null);
+    setActiveBook(null);
     setModal(true);
   };
 
@@ -114,16 +123,18 @@ const AdminBooks = () => {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Title</th> <th>Description</th> <th>Author</th> <th>Available</th> <th>Actions</th>
+            <th>Title</th> <th>Author</th> <th>Genre</th> <th>Description</th> <th>Available</th> <th>Rentee</th> <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {books.length ? books.map((book) => (
             <tr key={book.id}>
               <td><Link to={`/book/${book.id}`}>{book.title}</Link></td>
-              <td>{book.description}</td>
-              <td>{book.rentee || "N/A"}</td>
+              <td>{book.author}</td>
+              <td>{book.genre || "N/A"}</td>
+              <td>{book.description || "N/A"}</td>
               <td>{book.available ? "Yes" : "No"}</td>
+              <td>{book.rentee || "N/A"}</td>
               <td>
                 <button className="btn btn-secondary" onClick={() => editBook(book)}>Edit</button>
                 <button className="btn btn-danger" onClick={() => deleteBook(book.id)}>Delete</button>

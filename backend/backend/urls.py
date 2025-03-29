@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from lms import views
-from lms.views import LoginView, RentBookView, MeView, ReturnBookView, RegisterView
+from lms.views import LoginView, RentBookView, MeView, ReturnBookView, RegisterView, RenteeView
 
 router = routers.DefaultRouter()
 router.register(r'manage', views.AdminBookView, 'manage')
@@ -33,4 +33,5 @@ urlpatterns = [
     path("api/books/<int:book_id>/rent/", RentBookView.as_view(), name="rent-book"),
     path("api/books/<int:book_id>/return/", ReturnBookView.as_view(), name="return-book"),
     path("api/users/me/", MeView.as_view(), name="me"),
+    path("api/user/<int:id>/", RenteeView.as_view(), name="get-user-by-id"),
 ]

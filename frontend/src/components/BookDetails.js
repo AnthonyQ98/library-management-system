@@ -6,11 +6,12 @@ const BookDetails = () => {
     const { id } = useParams();
     const [book, setBook] = useState(null);
     const [error, setError] = useState(null);
-    const [userId, setUserId] = useState(null);
+    const [user, setUserId] = useState(null);
+    const [renteeName, setRenteeName] = useState(null);
 
     useEffect(() => {
         fetchBookDetails(id);
-        fetchUserId();
+        fetchUser();
     }, [id]);
 
     const getAuthAxios = () => {
@@ -29,6 +30,7 @@ const BookDetails = () => {
             .get(`books/${id}/`)
             .then((response) => {
                 setBook(response.data);
+                fetchRenteeById(response.data.rentee)
             })
             .catch((error) => {
                 console.error("Error fetching book details:", error.response);
@@ -36,11 +38,23 @@ const BookDetails = () => {
             });
     };
 
-    const fetchUserId = () => {
+    const fetchRenteeById = (id) => {
+        getAuthAxios()
+            .get(`user/${id}/`)
+            .then((response) => {
+                setRenteeName(response.data.username)
+            })
+            .catch((error) => {
+                console.error("Error fetching rentee by id: ", error.response);
+                setError("Error fetching rentee.")
+            })
+    }
+
+    const fetchUser = () => {
         getAuthAxios()
             .get("users/me/") // Assuming an endpoint to get logged-in user info
             .then((response) => {
-                setUserId(response.data.id);
+                setUserId(response.data);
             })
             .catch((error) => {
                 console.error("Error fetching user ID:", error.response);
@@ -53,7 +67,8 @@ const BookDetails = () => {
         getAuthAxios()
             .post(`books/${book.id}/rent/`)
             .then(() => {
-                setBook((prevBook) => ({ ...prevBook, available: false, rentee: userId }));
+                setBook((prevBook) => ({ ...prevBook, available: false, rentee: user.id }));
+                setRenteeName(user.username)
             })
             .catch((error) => {
                 console.error("Error renting book:", error.response);
@@ -68,6 +83,7 @@ const BookDetails = () => {
             .put(`books/${book.id}/return/`)
             .then(() => {
                 setBook((prevBook) => ({ ...prevBook, available: true, rentee: null }));
+                setRenteeName("")
             })
             .catch((error) => {
                 console.error("Error returning book:", error.response);
@@ -86,15 +102,17 @@ const BookDetails = () => {
             </div>
             <div className="card-body">
                 {error && <p className="text-danger">{error}</p>}
+                <p><strong>Author:</strong> {book.author}</p>
+                <p><strong>Genre:</strong> {book.genre}</p>
                 <p><strong>Description:</strong> {book.description}</p>
-                <p><strong>Rentee:</strong> {book.rentee || "None"}</p>
+                <p><strong>Rentee:</strong> {renteeName || "None"}</p>
                 <p><strong>Available:</strong> {book.available ? "Yes" : "No"}</p>
                 {book.available ? (
                     <button className="btn btn-primary" onClick={rentBook}>
                         RENT
                     </button>
                 ) : (
-                    book.rentee === userId && (
+                    book.rentee === user?.id && (
                         <button className="btn btn-warning" onClick={returnBook}>
                             RETURN
                         </button>

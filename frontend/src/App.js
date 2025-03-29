@@ -15,12 +15,16 @@ const App = () => {
         <Routes>
           <Route index path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
-            <Route element={<ProtectedRoute />}>
-              <Route path="/manage" element={<AdminBooks />} />
-            </Route>
+            <Route
+              path="/manage"
+              element={
+                <ProtectedRoute>
+                  <AdminBooks />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/" element={<MemberBooks />} />
             <Route path="/book/:id" element={<BookDetails />} />
           </Route>

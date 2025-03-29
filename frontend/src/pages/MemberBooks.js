@@ -50,6 +50,7 @@ const MemberBooks = () => {
                 <th>Title</th>
                 <th>Description</th>
                 <th>Author</th>
+                <th>Genre</th>
               </tr>
             </thead>
             <tbody>
@@ -60,7 +61,8 @@ const MemberBooks = () => {
                       <Link to={`/book/${book.id}`}>{book.title}</Link>
                     </td>
                     <td>{book.description}</td>
-                    <td>{book.rentee || "N/A"}</td>
+                    <td>{book.author || "N/A"}</td>
+                    <td>{book.genre || "N/A"}</td>
                   </tr>
                 ))
               ) : (
@@ -79,7 +81,8 @@ const MemberBooks = () => {
               <tr>
                 <th>Title</th>
                 <th>Description</th>
-                <th>Rented By</th>
+                <th>Author</th>
+                <th>Genre</th>
               </tr>
             </thead>
             <tbody>
@@ -90,7 +93,8 @@ const MemberBooks = () => {
                       <Link to={`/book/${book.id}`}>{book.title}</Link>
                     </td>
                     <td>{book.description}</td>
-                    <td>{book.rentee || "Unknown"}</td>
+                    <td>{book.author || "Unknown"}</td>
+                    <td>{book.genre || "Unknown"}</td>
                   </tr>
                 ))
               ) : (

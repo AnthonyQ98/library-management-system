@@ -5,6 +5,8 @@ class Modal extends Component {
         super(props);
         this.state = {
             title: props.book ? props.book.title : "",
+            author: props.book ? props.book.author : "",
+            genre: props.book ? props.book.genre : "",
             description: props.book ? props.book.description : "",
             available: props.book ? props.book.available : true,
             rentee: props.book ? props.book.rentee : "",
@@ -17,6 +19,8 @@ class Modal extends Component {
         if (prevProps.book !== this.props.book) {
             this.setState({
                 title: this.props.book ? this.props.book.title : "",
+                author: this.props.book ? this.props.book.author : "",
+                genre: this.props.book ? this.props.book.genre : "",
                 description: this.props.book ? this.props.book.description : "",
                 available: this.props.book ? this.props.book.available : true,
                 rentee: this.props.book ? this.props.book.rentee : "",
@@ -33,15 +37,15 @@ class Modal extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        const { title, description, available, rentee } = this.state;
+        const { title, description, available, rentee, author, genre } = this.state;
 
         // Basic validation to check if required fields are filled
-        if (!title || !description || !rentee) {
-            this.setState({ error: "Title, Description & Rentee are required" });
+        if (!title || !description || !author || !genre) {
+            this.setState({ error: "Title, Description, Author & Genre are required" });
             return;  // Prevent form submission if validation fails
         }
 
-        const bookData = { title, description, available, rentee };
+        const bookData = { title, description, available, rentee, author, genre };
         this.props.onSave(bookData);  // Passing the book data to the parent component
     };
 
@@ -79,6 +83,26 @@ class Modal extends Component {
                                         className="form-control"
                                         value={this.state.title}
                                         onChange={(e) => this.setState({ title: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Author</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={this.state.author}
+                                        onChange={(e) => this.setState({ author: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Genre</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={this.state.genre}
+                                        onChange={(e) => this.setState({ genre: e.target.value })}
                                     />
                                 </div>
 

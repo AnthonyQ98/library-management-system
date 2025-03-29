@@ -23,7 +23,7 @@ class CustomUserAdmin(BaseUserAdmin):
     )
 
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'available', 'rentee')
+    list_display = ('title', 'description', 'author', 'genre', 'available', 'rentee')
 
 class RentalAdmin(admin.ModelAdmin):
     readonly_fields = ['rented_at']

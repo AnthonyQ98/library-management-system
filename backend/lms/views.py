@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from rest_framework.generics import RetrieveAPIView
 
 from .models import Book, Rental, CustomUser
 from .serializers import BookSerializer, RentalSerializer, UserSerializer
@@ -138,3 +139,9 @@ class MeView(APIView):
     def get(self, request):
         user = request.user
         return Response(UserSerializer(user).data)
+
+class RenteeView(RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = "id"  # Default is pk, but just to be explicit

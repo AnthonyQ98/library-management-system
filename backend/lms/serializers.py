@@ -4,7 +4,7 @@ from .models import Book, Rental, CustomUser
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ('id', 'title', 'description', 'available', 'rentee')
+        fields = ('id', 'title', 'description', 'author', 'genre', 'available', 'rentee')
 
 class RentalSerializer(serializers.ModelSerializer):
     class Meta:

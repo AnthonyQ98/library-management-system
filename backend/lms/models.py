@@ -13,6 +13,8 @@ class CustomUser(AbstractUser):
 # Book Model for Library
 class Book(models.Model):
     title = models.CharField(max_length=120)
+    author = models.CharField(max_length=120)
+    genre = models.CharField(max_length=120)
     description = models.TextField()
     available = models.BooleanField(default=True)
     rentee = models.ForeignKey(
