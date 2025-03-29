@@ -1,0 +1,11 @@
+# Node base image
+FROM node:18
+
+WORKDIR /app
+
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "start"]
